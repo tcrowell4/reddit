@@ -232,6 +232,7 @@ for rowcat in dfcat.itertuples():
     #print("Debug: MH_boundaries\n", MH_boundaries)
 
     #test version git branch
+    print(">>>>>>   github branch >>>>")
     #deciding where the information goes depending if it's man hours or equipment hours
     if rowcat.RD_Unit == "MH":
         for coordinate in MH_boundaries:

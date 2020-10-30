@@ -4,6 +4,9 @@
 #xlsxwriter version 1.3.7 required
 #openpyxl version 3.0.4 required
 
+#https://github.com/py3nub/wpmkr
+#author: py3nub
+
 #importing required modules and libraries
 
 import os
@@ -56,6 +59,7 @@ dfAD.columns = [c.replace('/', '') for c in dfAD.columns]
 #adding a prefix to the columns to know which dataframe we are pulling from
 dfAD = dfAD.add_prefix('AD_')
 #print("Debug:  dfAD add prefix\n",dfAD)
+
 #maybe don't need this AD_cols = list(dfAD.columns)
 #setting constraints on what we want to be used from the dataframe
 dfAD = dfAD[dfAD.AD_MH >= 500]
@@ -64,7 +68,7 @@ dfAD = dfAD[dfAD.AD_Biditem <= 9000]
 dfAD = dfAD.reset_index(drop=True)
 dfAD.index += 1
 
-#creating lits of certain columns to set more constraints in the next dataframe
+#creating lists of certain columns to set more constraints in the next dataframe
 AD_biditem_list = sorted(set(dfAD['AD_Biditem'].tolist()))
 AD_bid_desc_list = sorted(set(dfAD['AD_Bid_Desc'].tolist()))
 AD_description_list = sorted(set(dfAD['AD_Description'].tolist()))
@@ -91,6 +95,7 @@ dfRD = dfRD.add_prefix('RD_')
 dfRD = dfRD[(dfRD.RD_Unit == 'MH') | (dfRD.RD_Unit == 'HR')]
 dfRD = dfRD[dfRD.RD_Biditem <= 9000]
 #print("Debug:  Post constraints dfRD\n",dfRD)
+
 #comparing to dfAD to remove rows that do not match
 #print("Debug: RD_Biditem\n", dfRD['RD_Biditem'], dfRD['RD_Biditem'].isin(AD_biditem_list))
 #print("Debug: RD_Bid_Desc\n", dfRD['RD_Bid_Desc'], dfRD['RD_Bid_Desc'].isin(AD_bid_desc_list))
@@ -105,8 +110,9 @@ dfRD = dfRD[dfRD['RD_Actv_Desc'].isin(AD_description_list)]
 dfRD = dfRD.reset_index(drop=True)
 dfRD.index += 1
 
-#creating lists of the matching rows in dfAD and dfRD to reset the index for dfRD to match dfAD and only contain\
-#rows we want
+# creating lists of the matching rows in dfAD and dfRD to reset the index
+# for dfRD to match dfAD and only contain
+# rows we want
 tuples_list = []
 index_list = []
 for rowAD in dfAD.itertuples():
@@ -115,16 +121,16 @@ for rowAD in dfAD.itertuples():
         #print("Debug: Bid_Desc ",rowAD.AD_Bid_Desc, rowRD.RD_Bid_Desc)
         #print("Debug: Description ",rowAD.AD_Description,rowRD.RD_Actv_Desc)
         if rowAD.AD_Biditem == rowRD.RD_Biditem \
-            and rowAD.AD_Bid_Desc == rowRD.RD_Bid_Desc \
-            and rowAD.AD_Description == rowRD.RD_Actv_Desc:
+                and rowAD.AD_Bid_Desc == rowRD.RD_Bid_Desc \
+                and rowAD.AD_Description == rowRD.RD_Actv_Desc:
             tuples_list.append(rowRD)
             index_list.append(rowAD.Index)
 #print("Debug: tuples_list index_list",tuples_list,index_list)
 
 #creating dfRD2 that has the matching index and rows we want
-dfRD2 = pd.DataFrame(tuples_list, columns=['RD_Index', 'RD_Biditem', 'RD_Bid_Desc',\
-'RD_Actv_Desc', 'RD_Description', 'RD_Quantity', 'RD_Unit', 'RD_Unit_Cost', 'RD_PcsWste',\
-'RD_Total'])
+dfRD2 = pd.DataFrame(tuples_list, columns=['RD_Index', 'RD_Biditem', 'RD_Bid_Desc',
+                    'RD_Actv_Desc', 'RD_Description', 'RD_Quantity',
+                    'RD_Unit', 'RD_Unit_Cost', 'RD_PcsWste','RD_Total'])
 #replacing unusable characters in the column names to be referenced later
 dfRD2.columns = [c.replace(' ', '_') for c in dfRD2.columns]
 dfRD2.columns = [c.replace('.', '') for c in dfRD2.columns]
@@ -217,6 +223,9 @@ for rowcat in dfcat.itertuples():
         for column in range(start_col_HR,end_col_HR):
             column_letter = get_column_letter(column)
             HR_boundaries.append(column_letter + str(row))
+
+    print("Debug: HR_boundaries\n", HR_boundaries)
+    print("Debug: MH_boundaries\n", MH_boundaries)
 
     #deciding where the information goes depending if it's man hours or equipment hours
     if rowcat.RD_Unit == "MH":

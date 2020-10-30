@@ -228,8 +228,8 @@ for rowcat in dfcat.itertuples():
             column_letter = get_column_letter(column)
             HR_boundaries.append(column_letter + str(row))
 
-    print("Debug: HR_boundaries\n", HR_boundaries)
-    print("Debug: MH_boundaries\n", MH_boundaries)
+    #print("Debug: HR_boundaries\n", HR_boundaries)
+    #print("Debug: MH_boundaries\n", MH_boundaries)
 
     #deciding where the information goes depending if it's man hours or equipment hours
     if rowcat.RD_Unit == "MH":

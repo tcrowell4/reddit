@@ -1,0 +1,101 @@
+PS C:\Users\tcrow\Documents\Src\Python\reddit> py .\wpmkr_public.py
+Debug:  cwd C:\Users\tcrow\Documents\Src\Python\reddit
+Debug:  cwd before read C:\Users\tcrow\Documents\Src\Python\reddit
+Debug:  dfAD.columns
+ Index(['Biditem', 'Bid Desc', 'Description', 'Quan', 'Unit', 'Shifts', 'MH',
+       'Total Labor'],
+      dtype='object')
+Debug:  POST replace dfAD.columns
+ Index(['Biditem', 'Bid_Desc', 'Description', 'Quan', 'Unit', 'Shifts', 'MH',
+       'Total_Labor'],
+      dtype='object')
+Debug:  dfAD
+    Biditem   Bid_Desc     Description  Quan  Unit  Shifts   MH  Total_Labor
+0     1111  Bid 11111  111Description   NaN   NaN     NaN  600          NaN
+1     2111  Bid 21111  112Description   NaN   NaN     NaN  700          NaN
+Debug:  dfAD add prefix
+    AD_Biditem AD_Bid_Desc  AD_Description  AD_Quan  AD_Unit  AD_Shifts  AD_MH  AD_Total_Labor
+0        1111   Bid 11111  111Description      NaN      NaN        NaN    600             NaN
+1        2111   Bid 21111  112Description      NaN      NaN        NaN    700             NaN
+Debug:  AD Lists
+ [1111, 2111] ['Bid 11111', 'Bid 21111'] ['111Description', '112Description']
+Debug:  dfRD
+    Biditem  Bid Desc.      Actv Desc.        Description  Quantity Unit  Unit Cost  Pcs/Wste  Total
+0     1111  Bid 11111  111Description  111Descriptionxxx         3   MH         45        56     72
+1     2111  Bid 21111  112Description  112Descriptionxxx         5   HR         15        25     30
+Debug:  Post replace/prefix dfRD
+    RD_Biditem RD_Bid_Desc    RD_Actv_Desc     RD_Description  RD_Quantity RD_Unit  RD_Unit_Cost  RD_PcsWste  RD_Total
+0        1111   Bid 11111  111Description  111Descriptionxxx            3      MH            45          56        72
+1        2111   Bid 21111  112Description  112Descriptionxxx            5      HR            15          25        30
+Debug:  Post constraints dfRD
+    RD_Biditem RD_Bid_Desc    RD_Actv_Desc     RD_Description  RD_Quantity RD_Unit  RD_Unit_Cost  RD_PcsWste  RD_Total
+0        1111   Bid 11111  111Description  111Descriptionxxx            3      MH            45          56        72
+1        2111   Bid 21111  112Description  112Descriptionxxx            5      HR            15          25        30
+Debug: RD_Biditem
+ 0    1111
+1    2111
+Name: RD_Biditem, dtype: int64 0    True
+1    True
+Name: RD_Biditem, dtype: bool
+Debug: RD_Bid_Desc
+ 0    Bid 11111
+1    Bid 21111
+Name: RD_Bid_Desc, dtype: object 0    True
+1    True
+Name: RD_Bid_Desc, dtype: bool
+Debug: RD_Actv_Desc
+ 0    111Description
+1    112Description
+Name: RD_Actv_Desc, dtype: object 0    True
+1    True
+Name: RD_Actv_Desc, dtype: bool
+Debug:  Post remove rows dfRD
+    RD_Biditem RD_Bid_Desc    RD_Actv_Desc     RD_Description  RD_Quantity RD_Unit  RD_Unit_Cost  RD_PcsWste  RD_Total
+0        1111   Bid 11111  111Description  111Descriptionxxx            3      MH            45          56        72
+1        2111   Bid 21111  112Description  112Descriptionxxx            5      HR            15          25        30
+Debug: Biditem  1111 1111
+Debug: Bid_Desc  Bid 11111 Bid 11111
+Debug: Description  111Description 111Description
+Debug: Biditem  1111 2111
+Debug: Bid_Desc  Bid 11111 Bid 21111
+Debug: Description  111Description 112Description
+Debug: Biditem  2111 1111
+Debug: Bid_Desc  Bid 21111 Bid 11111
+Debug: Description  112Description 111Description
+Debug: Biditem  2111 2111
+Debug: Bid_Desc  Bid 21111 Bid 21111
+Debug: Description  112Description 112Description
+Debug: tuples_list index_list
+[ Pandas(Index=1, RD_Biditem=1111, RD_Bid_Desc='Bid 11111', RD_Actv_Desc='111Description', RD_Description='111Descriptionxxx',
+    RD_Quantity=3, RD_Unit='MH', RD_Unit_Cost=45, RD_PcsWste=56, RD_Total=72),
+  Pandas(Index=2, RD_Biditem=2111, RD_Bid_Desc='Bid 21111', RD_Actv_Desc='112Description', RD_Description='112Descriptionxxx',
+    RD_Quantity=5, RD_Unit='HR', RD_Unit_Cost=15, RD_PcsWste=25, RD_Total=30)] 
+[1, 2]
+Debug:  dfcat
+AD_Biditem AD_Bid_Desc  AD_Description  AD_Quan  AD_Unit  AD_Shifts  ...     RD_Description  RD_Quantity  RD_Unit RD_Unit_Cost RD_PcsWste RD_Total
+1        1111   Bid 11111  111Description      NaN      NaN        NaN  ...  111Descriptionxxx            3       MH           45         56       72
+2        2111   Bid 21111  112Description      NaN      NaN        NaN  ...  112Descriptionxxx            5       HR           15         25       30
+
+[2 rows x 17 columns]
+Debug:  cwd C:\Users\tcrow\Documents\Src\Python\reddit
+Debug: wb_name templatename
+ mypath\\Workplan_Folder\1111_111Description\1111_111Description.xlsx
+ mypath\\Work Plan Template v2.xlsx
+Debug: wb_name templatename
+ mypath\\Workplan_Folder\2111_112Description\2111_112Description.xlsx
+ mypath\\Work Plan Template v2.xlsx
+Debug: wb
+ <openpyxl.workbook.workbook.Workbook object at 0x0000027E24B7F700>
+Debug: ws
+ <Worksheet "WORKPLAN">
+Debug: ws['C3'].value None
+mypath\\Workplan_Folder\2111_112Description\2111_112Description.xlsx has been updated. When this message changes, the workplan is complete.
+Debug: wb
+ <openpyxl.workbook.workbook.Workbook object at 0x0000027E24B99160>
+Debug: ws
+ <Worksheet "WORKPLAN">
+Debug: ws['C3'].value Python
+mypath\\Workplan_Folder\2111_112Description\2111_112Description.xlsx has been updated. When this message changes, the workplan is complete.
+All work plans have been completed successfully
+Time to complete all work plans: 0:00:00.177361
+Press Enter to Escape

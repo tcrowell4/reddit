@@ -174,16 +174,64 @@ for rowcat in dfcat.itertuples():
 completed_by = 'Python'
 job_number = '123'
 
+#creating boundaries for where the man hour information goes
+start_row_MH = 34
+end_row_MH = 52
+start_col_MH = 11
+end_col_MH = 15
+MH_boundaries = []
+for row in range(start_row_MH,end_row_MH):
+    for column in range(start_col_MH,end_col_MH):
+        column_letter = get_column_letter(column)
+        MH_boundaries.append(column_letter + str(row))
+
+#creating boundaries for where the equipment hour information goes
+start_row_HR = 58
+end_row_HR = 76
+start_col_HR = 11
+end_col_HR = 14
+HR_boundaries = []
+for row in range(start_row_HR,end_row_HR):
+    for column in range(start_col_HR,end_col_HR):
+        column_letter = get_column_letter(column)
+        HR_boundaries.append(column_letter + str(row))
+
+#print("Debug: HR_boundaries\n", HR_boundaries)
+#print("Debug: MH_boundaries\n", MH_boundaries)
+
+
 #iterating through each row of dfcat to place the information where it goes in the new workplan files
+# This currently opens a workbook and updates  it for the current rows
+# and then writes it ...
+# Then reloads the same workbook if there is more information on the next row
+# and depends on whether something has been written on a line to cause it to go to the
+# next lines in the sheet for  RD  data
+last_bidkey = ""
 for rowcat in dfcat.itertuples():
+    #print("Debug: rowcat\n", rowcat)
     bid_num = str(int(rowcat.AD_Biditem))
     act_desc = str(rowcat.AD_Description)
-    temp_dir = os.path.join(wp_folder, bid_num + "_" + act_desc)
-    wb_name = (temp_dir + "\\" + bid_num + "_" + act_desc + '.xlsx')
-    wb = openpyxl.load_workbook(wb_name)
-    ws = wb['WORKPLAN']
-    #print("Debug: wb\n", wb)
-    #print("Debug: ws\n", ws)
+    bidkey = bid_num + "_" + act_desc
+    if bidkey != last_bidkey:
+        #saving each iteration to it's respective work plan
+        # write work book if it isn't the first time
+        if last_bidkey != "":
+            #saving each iteration to it's respective work plan
+            wb.save(wb_name)
+            print(wb_name + ' has been updated. When this message changes, the workplan is complete.')
+
+        #update last_bidkey
+        last_bidkey = bidkey
+
+        # initialize for change of bidkey
+        temp_dir = os.path.join(wp_folder, bidkey)
+        #wb_name = (temp_dir + "\\" + bidkey + '.xlsx')
+        wb_name = os.path.join(temp_dir, bidkey + '.xlsx')
+        #print("Debug: wb_name\n", wb_name, bidkey, temp_dir)
+        wb = openpyxl.load_workbook(wb_name)
+        ws = wb['WORKPLAN']
+        #print("Debug: wb\n", wb)
+        #print("Debug: ws\n", ws)
 
     #placing the budget information into the workplan
     #print("Debug: ws['C3'].value", ws['C3'].value)
@@ -206,33 +254,7 @@ for rowcat in dfcat.itertuples():
     if ws['U12'].value is None:
         ws['U12'] = rowcat.AD_Total_Labor
 
-    #creating boundaries for where the man hour information goes
-    start_row_MH = 34
-    end_row_MH = 52
-    start_col_MH = 11
-    end_col_MH = 15
-    MH_boundaries = []
-    for row in range(start_row_MH,end_row_MH):
-        for column in range(start_col_MH,end_col_MH):
-            column_letter = get_column_letter(column)
-            MH_boundaries.append(column_letter + str(row))
 
-    #creating boundaries for where the equipment hour information goes
-    start_row_HR = 58
-    end_row_HR = 76
-    start_col_HR = 11
-    end_col_HR = 14
-    HR_boundaries = []
-    for row in range(start_row_HR,end_row_HR):
-        for column in range(start_col_HR,end_col_HR):
-            column_letter = get_column_letter(column)
-            HR_boundaries.append(column_letter + str(row))
-
-    #print("Debug: HR_boundaries\n", HR_boundaries)
-    #print("Debug: MH_boundaries\n", MH_boundaries)
-
-    #test version git branch
-    print(">>>>>>   github branch >>>>")
     #deciding where the information goes depending if it's man hours or equipment hours
     if rowcat.RD_Unit == "MH":
         for coordinate in MH_boundaries:
@@ -265,10 +287,10 @@ for rowcat in dfcat.itertuples():
                 ws[coordinate] = rowcat.RD_Total
                 break
 
-    #saving each iteration to it's respective work plan
-    wb.save(wb_name)
-    #shows you in the command prompt what is being worked on
-    print(wb_name + ' has been updated. When this message changes, the workplan is complete.')
+#saving each iteration to it's respective work plan
+wb.save(wb_name)
+#shows you in the command prompt what is being worked on
+print(wb_name + ' has been updated. When this message changes, the workplan is complete.')
 
 print('All work plans have been completed successfully\nTime to complete all work plans: ' + str(datetime.datetime.now() - begin_time))
 input('Press Enter to Escape')
